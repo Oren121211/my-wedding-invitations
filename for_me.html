@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דף ניהול אישורי הגעה</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EEE4DC;
+            color: #0B303B;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            color: #0B303B;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #0B303B;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>ניהול אישורי הגעה</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>שם המוזמן</th>
+                <th>מספר טלפון</th>
+                <th>אישר הגעה</th>
+                <th>מספר מוזמנים נוספים</th>
+            </tr>
+        </thead>
+        <tbody id="guestResponses">
+            <!-- כאן יופיעו כל המוזמנים -->
+        </tbody>
+    </table>
+
+    <script>
+        // טעינת התשובות שנשמרו (מ-LocalStorage)
+        function loadResponses() {
+            const guestResponsesTable = document.getElementById('guestResponses');
+            guestResponsesTable.innerHTML = ""; // ריקון הטבלה
+
+            const responses = JSON.parse(localStorage.getItem('guestResponses')) || [];
+
+            responses.forEach(response => {
+                const row = document.createElement('tr');
+
+                // יצירת עמודות
+                const nameCell = document.createElement('td');
+                nameCell.textContent = response.name;
+                row.appendChild(nameCell);
+
+                const phoneCell = document.createElement('td');
+                phoneCell.textContent = response.phone;
+                row.appendChild(phoneCell);
+
+                const confirmedCell = document.createElement('td');
+                confirmedCell.textContent = response.confirmed ? "אישר" : "לא אישר";
+                row.appendChild(confirmedCell);
+
+                const additionalGuestsCell = document.createElement('td');
+                additionalGuestsCell.textContent = response.additionalGuests;
+                row.appendChild(additionalGuestsCell);
+
+                guestResponsesTable.appendChild(row);
+            });
+        }
+
+        // טעינת התשובות כאשר הדף נטען
+        window.onload = loadResponses;
+    </script>
+</body>
+</html>

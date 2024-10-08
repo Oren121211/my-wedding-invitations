@@ -47,7 +47,7 @@
 
         // פונקציה ליצירת קישורים מותאמים אישית לוואטסאפ
         function createWhatsAppLink(guest) {
-            const message = `ל${guest.name}, הנך מוזמן לחגוג עם חן ואורן את היום המאושר בחייהן! נא אשר את הגעתך בקישור הבא: https://example.com/rsvp.html?name=${guest.name}&phone=${guest.phone}`;
+            const message = `ל${guest.name}, הנך מוזמן לחגוג עם חן ואורן את היום המאושר בחייהן! נא אשר את הגעתך בקישור הבא: rsvp.html{guest.name}&phone=${guest.phone}`;
             const url = `https://wa.me/972${guest.phone.substring(1)}?text=${encodeURIComponent(message)}`;
             return url;
         }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שליחת הזמנות לחתונה</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EEE4DC;
+            color: #0B303B;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            color: #0B303B;
+        }
+        input[type="date"], input[type="button"] {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .guest-list {
+            margin-top: 20px;
+        }
+        .guest {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>שליחת הזמנה לחתונה</h1>
+    <div>
+        <label for="date">בחר תאריך לשליחה:</label>
+        <input type="date" id="date">
+        <input type="button" value="שלח הזמנות לכולם" onclick="sendInvitations()">
+        <div class="guest-list" id="guestList"></div>
+    </div>
+
+    <script>
+        // רשימת המוזמנים עם מספרי הטלפון
+        const guests = [
+            { name: "אורן" ,phone: "0546611629" },
+            { name: "אביה" ,phone: "0546611629" }
+            
+        ];
+
+        // פונקציה ליצירת קישורים מותאמים אישית לוואטסאפ
+        function createWhatsAppLink(guest) {
+            const message = `ל${guest.name}, הנך מוזמן לחגוג עם חן ואורן את היום המאושר בחייהן! נא אשר את הגעתך בקישור הבא: https://example.com/rsvp.html?name=${guest.name}&phone=${guest.phone}`;
+            const url = `https://wa.me/972${guest.phone.substring(1)}?text=${encodeURIComponent(message)}`;
+            return url;
+        }
+
+        // פונקציה ליצירת רשימת קישורים ולשליחתם בוואטסאפ
+        function sendInvitations() {
+            const date = document.getElementById("date").value;
+            if (!date) {
+                alert("בחר תאריך לשליחה!");
+                return;
+            }
+            
+            const guestListDiv = document.getElementById("guestList");
+            guestListDiv.innerHTML = ""; // ריק את הרשימה הקודמת אם קיימת
+            
+            guests.forEach(guest => {
+                const link = createWhatsAppLink(guest);
+                const guestDiv = document.createElement("div");
+                guestDiv.classList.add("guest");
+                guestDiv.innerHTML = `<a href="${link}" target="_blank">שלח הזמנה ל${guest.name} דרך WhatsApp</a>`;
+                guestListDiv.appendChild(guestDiv);
+            });
+
+            alert("הזמנות מוכנות לשליחה!");
+        }
+    </script>
+</body>
+</html>
+

@@ -3,77 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>שליחת הזמנות לחתונה</title>
+    <title>שליחת הודעות מוזמנים</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #EEE4DC;
-            color: #0B303B;
-            text-align: center;
-            margin: 20px;
+            font-family: Arial, sans-serif; /* גופן הדף */
+            text-align: center; /* מרכז את הטקסט */
+            padding: 20px; /* מרווח סביב הדף */
         }
-        h1 {
-            color: #0B303B;
+        .container {
+            max-width: 600px; /* רוחב מקסימלי של התוכן */
+            margin: 0 auto; /* מרכז את התוכן בדף */
         }
-        input[type="date"], input[type="button"] {
-            padding: 10px;
-            margin: 10px;
-            font-size: 16px;
+        a {
+            display: inline-block; /* הופך את הקישור לבלוק */
+            margin-top: 20px; /* מרווח עליון */
+            padding: 10px 20px; /* מרווח פנימי */
+            background-color: #007bff; /* צבע רקע לקישור */
+            color: white; /* צבע טקסט */
+            text-decoration: none; /* מסיר קו תחתון */
+            border-radius: 5px; /* מעגל פינות */
         }
-        .guest-list {
-            margin-top: 20px;
-        }
-        .guest {
-            margin-bottom: 10px;
+        a:hover {
+            background-color: #0056b3; /* צבע רקע לקישור במעבר עכבר */
         }
     </style>
 </head>
 <body>
-    <h1>שליחת הזמנה לחתונה</h1>
-    <div>
-        <label for="date">בחר תאריך לשליחה:</label>
-        <input type="date" id="date">
-        <input type="button" value="שלח הזמנות לכולם" onclick="sendInvitations()">
-        <div class="guest-list" id="guestList"></div>
+
+    <div class="container">
+        <h1>שליחת הודעות מוזמנים</h1>
+        <p>לחצי על הקישור למטה לשליחת הודעות לכל המוזמנים:</p>
+        <a href="javascript:void(0);" onclick="sendInvitations()">שלח הודעות למוזמנים</a>
     </div>
 
     <script>
-        // רשימת המוזמנים עם מספרי הטלפון
-        const guests = [
-            { name: "אורן" ,phone: "0546611629" },
-            { name: "אביה" ,phone: "0546611629" }
-            
-        ];
-
-        // פונקציה ליצירת קישורים מותאמים אישית לוואטסאפ
-        function createWhatsAppLink(guest) {
-            const message = `ל${guest.name}, הנך מוזמן לחגוג עם חן ואורן את היום המאושר בחייהן! נא אשר את הגעתך בקישור הבא: rsvp.html{guest.name}&phone=${guest.phone}`;
-            const url = `https://wa.me/972${guest.phone.substring(1)}?text=${encodeURIComponent(message)}`;
-            return url;
-        }
-
-        // פונקציה ליצירת רשימת קישורים ולשליחתם בוואטסאפ
         function sendInvitations() {
-            const date = document.getElementById("date").value;
-            if (!date) {
-                alert("בחר תאריך לשליחה!");
-                return;
-            }
-            
-            const guestListDiv = document.getElementById("guestList");
-            guestListDiv.innerHTML = ""; // ריק את הרשימה הקודמת אם קיימת
-            
+            // רשימת המוזמנים עם השמות, הטלפונים והמגדרים
+            const guests = [
+                { name: 'אורן', phone: '+972546611629', gender: 'female' }, // הוסיפי כאן את המוזמנים שלך
+                
+                // הוסיפי כאן את שאר המוזמנים
+            ];
+
+            let message = ""; // משתנה לשמירת ההודעה שתשלח
             guests.forEach(guest => {
-                const link = createWhatsAppLink(guest);
-                const guestDiv = document.createElement("div");
-                guestDiv.classList.add("guest");
-                guestDiv.innerHTML = `<a href="${link}" target="_blank">שלח הזמנה ל${guest.name} דרך WhatsApp</a>`;
-                guestListDiv.appendChild(guestDiv);
+                // בודק את המגדר לקביעת הכינוי המתאים
+                const title = guest.gender === 'male' ? 'יקר' : 'יקרה';
+                message += `ל${guest.name} ${title} הנך מוזמן לחגוג עם חן ואורן את היום המאושר בחייהן, אנא אשר הגעתך בקישור הבא.\n rsvp.html`;
             });
 
-            alert("הזמנות מוכנות לשליחה!");
+            // מקודד את ההודעה שנשלחת לוואטסאפ
+            const encodedMessage = encodeURIComponent(message);
+            // יוצר את הקישור לוואטסאפ
+            const whatsappLink = `https://wa.me/?text=${encodedMessage}`;
+            // פותח את הקישור
+            window.open(whatsappLink, '_blank');
         }
     </script>
+
 </body>
 </html>
 

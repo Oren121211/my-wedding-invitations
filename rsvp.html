@@ -4,66 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>אישור הגעה</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #EEE4DC;
-            color: #0B303B;
-            text-align: center;
-            margin: 20px;
-        }
-        h1 {
-            color: #0B303B;
-        }
-        .confirmation {
-            margin: 20px;
-        }
-    </style>
 </head>
 <body>
     <h1>אישור הגעה</h1>
-    <div class="confirmation" id="confirmation"></div>
-    <label for="guestsCount">מספר מוזמנים נוספים:</label>
-    <select id="guestsCount">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
-    <br>
-    <input type="button" value="מאשר הגעה" onclick="submitResponse(true)">
-    <input type="button" value="לצערי לא אגיע" onclick="submitResponse(false)">
+    
+    <div id="guestInfo"></div> <!-- כאן יופיע מידע על המוזמן -->
+    
+    <label for="guestCount">כמה אנשים יגיעו?</label>
+    <input type="number" id="guestCount" min="1" value="1" /> <!-- בחירת כמות המוזמנים -->
+    
+    <button id="confirmAttendance">מאשר הגעה</button> <!-- כפתור אישור הגעה -->
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const guestName = urlParams.get('name');
-        const guestPhone = urlParams.get('phone');
+        // קבלת פרטי המוזמן מהכתובת (URL)
+        const urlParams = new URLSearchParams(window.location.search); // קבלת פרמטרים מהכתובת
+        const guestName = urlParams.get('name'); // קבלת שם המוזמן
+        const guestGender = urlParams.get('gender'); // קבלת מגדר המוזמן
 
-        document.getElementById('confirmation').innerHTML = `שלום ${guestName}, נא אשר את הגעתך.`;
+        // הצגת המידע על המוזמן
+        const greeting = guestGender === 'זכר' ? 'יקר' : 'יקרה'; // קביעת תואר לפי מגדר
+        document.getElementById('guestInfo').innerText = `ל${guestName} ${greeting}, אנא בחר את כמות האנשים שיגיעו.`;
 
-        // פונקציה לשליחת התשובה למערכת הניהול
-        function submitResponse(confirmed) {
-            const additionalGuests = document.getElementById('guestsCount').value;
-
-            // שליחת המידע לשרת (באמצעות פייק-API, או ניתן להחליף בשימוש ב-LocalStorage)
-            const response = {
-                name: guestName,
-                phone: guestPhone,
-                confirmed: confirmed,
-                additionalGuests: additionalGuests
-            };
-
-            // שמירה ב-LocalStorage (מדמה שליחה לשרת)
-            let savedResponses = JSON.parse(localStorage.getItem('guestResponses')) || [];
-            savedResponses.push(response);
-            localStorage.setItem('guestResponses', JSON.stringify(savedResponses));
-
-            alert("תשובתך נשמרה בהצלחה!");
-            window.location.href = "confirmation-management.html"; // מעבר לדף הניהול
-        }
+        // כפתור אישור הגעה
+        document.getElementById('confirmAttendance').addEventListener('click', function() {
+            const guestCount = document.getElementById('guestCount').value; // קבלת כמות המוזמנים
+            if (guestCount) {
+                localStorage.setItem(guestName, guestCount); // שמירה ב-Local Storage
+                alert(`תודה, ${guestName}! הגעתך אושרה עם ${guestCount} אנשים.`);
+                // הוחזרה לדף הניהול לאחר האישור
+                window.location.href = 'for_me.html'; // עדכון הקישור לדף ניהול המוזמנים
+            } else {
+                alert("חובה להזין כמות אנשים."); // הודעה במקרה של אי הזנת כמות
+            }
+        });
     </script>
 </body>
 </html>
+
 
